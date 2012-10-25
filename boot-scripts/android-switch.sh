@@ -30,6 +30,7 @@ case "$1" in
     mount -o bind $MASKED_BIN /system/bin
     # killall is not available, so:
     ZYGOTE_PID=`ps | grep zygote | grep -v grep | awk '{print $2}'`
+    echo ondemand > /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
     kill $ZYGOTE_PID
     ;;
   on)
