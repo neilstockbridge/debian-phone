@@ -4,8 +4,14 @@ cmd_subfolder = os.path.realpath(os.path.abspath(os.path.join(os.path.split(insp
 if cmd_subfolder not in sys.path:
   sys.path.insert( 0, cmd_subfolder)
 
-import battery
+import battery, backlight
 
 def battery_level():
   return battery.level()
+
+def backlight_brightness():
+  return backlight.brightness()
+
+def set_backlight_brightness( level):
+  backlight.set_brightness( level)
 
