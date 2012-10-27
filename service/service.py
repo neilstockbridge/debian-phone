@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 import socket
-from socket import socket, AF_INET, SOCK_STREAM, SOL_SOCKET, SO_REUSEADDR
+from socket import socket, AF_INET, SOCK_STREAM, SOL_SOCKET, SO_REUSEADDR, error
 import json_rpc
 
 bind_to_address = "0.0.0.0"
@@ -17,7 +17,8 @@ while True:
   conn, addr = s.accept()
   print "Incoming:", addr[0]
   while True:
-    request_as_json = conn.recv( 2048)
+    try: request_as_json = conn.recv( 2048)
+    except error: break
     if not request_as_json: break
     print "  << ", request_as_json
     response_as_json = json_rpc.response_to( request_as_json)
