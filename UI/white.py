@@ -3,6 +3,8 @@
 
 import platform
 ON_PHONE = platform.node() != "neils-laptop"
+# SHOULD_CONNECT = False allows some development without connecting to the phone service
+SHOULD_CONNECT = True
 
 import sys, pygame, phone
 from os import environ
@@ -76,19 +78,20 @@ def render( state):
   if formatted_time.startswith("0"): formatted_time = formatted_time[1:]
   write( formatted_time.lower(), (screen_dimensions.w - 40, 0))
 
-  #if 50 < state.battery_level: frame = 0
-  #elif 20 < state.battery_level: frame = 1
-  #else: frame = 2
-  #screen.blit( battery_frames, (screen_dimensions.w - 50,0), (8*frame,0,8,12))
+  if SHOULD_CONNECT:
+    if 50 < state.battery_level: frame = 0
+    elif 20 < state.battery_level: frame = 1
+    else: frame = 2
+    screen.blit( battery_frames, (screen_dimensions.w - 50,0), (8*frame,0,8,12))
 
-  #write("%i MHz"%state.cpu_frequency, (10,0) )
+    write("%i MHz"%state.cpu_frequency, (10,0) )
 
-  #write(u"%i°C"%state.temperature, (60,0) )
+    write(u"%i°C"%state.temperature, (60,0) )
 
-  #write("r:%iM"%state.rild_size, (90,0) )
+    write("r:%iM"%state.rild_size, (90,0) )
 
-  #total, in_use, idle, swap_total, swap_in_use = state.memory_usage
-  #write("i:%iM"%idle, (120,0) )
+    total, in_use, idle, swap_total, swap_in_use = state.memory_usage
+    write("i:%iM"%idle, (120,0) )
 
   # panel?: list of objects that know how to render themselves
 
@@ -97,13 +100,13 @@ def render( state):
 
 
 state = State()
-#phone.connect_to("vf845")
+if SHOULD_CONNECT: phone.connect_to("vf845")
 
 clock = pygame.time.Clock()
 
 while True:
   clock.tick( 10)
-  #state.update()
+  if SHOULD_CONNECT: state.update()
   if ON_PHONE: input_fix.poll_inputs( screen)
   for event in pygame.event.get():
     if event.type == pygame.QUIT: sys.exit()
