@@ -1,7 +1,13 @@
 #!/usr/bin/env python
 # vim: set fileencoding=utf-8 :
 
+import platform
+ON_PHONE = platform.node() != "neils-laptop"
+
 import sys, pygame, phone
+from os import environ
+environ["SDL_NOMOUSE"] = "1"
+if ON_PHONE: import input_fix
 from pygame import KEYDOWN, KEYUP, MOUSEMOTION, MOUSEBUTTONDOWN, MOUSEBUTTONUP
 from time import localtime, strftime
 from time import time
@@ -98,6 +104,7 @@ clock = pygame.time.Clock()
 while True:
   clock.tick( 10)
   #state.update()
+  if ON_PHONE: input_fix.poll_inputs( screen)
   for event in pygame.event.get():
     if event.type == pygame.QUIT: sys.exit()
     if event.type == KEYUP and event.key in [pygame.K_ESCAPE, pygame.K_q]: sys.exit()
